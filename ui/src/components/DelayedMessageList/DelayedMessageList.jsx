@@ -6,7 +6,6 @@ const tg = window.Telegram.WebApp;
 const delayedMessageService = new DelayedMessageService();
 export default function DelayedMessageList() {
     const [delayedMessages, setDelayedMessages] = useState([]);
-    const [tmp, setTmp] = useState(null);
     const getItemsAsync = async (id) => {
         const call = () => fetch('https://localhost:44392/api/DelayedMessage/GetAllMessagesByUserId/' + id, {
             method: "get",
@@ -17,14 +16,13 @@ export default function DelayedMessageList() {
 
     useEffect( () => {
         const userId  = tg.initDataUnsafe.user.id
-        delayedMessageService.getMessagesByUserId(userId).then(
+        delayedMessageService.getMessagesByUserId(userId).then(res => res.json()).then(
             res => {
-                tg.showAlert(res)
                 setDelayedMessages(res)
             }
         ).catch(
             res => {
-                tg.showAlert(res)
+                tg.showAlert("Something went wrong")
             }
         )
         // async function fetchMyAPI() {
@@ -44,19 +42,11 @@ export default function DelayedMessageList() {
     );
     return (
         <div>
-         {/*   <Box sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}>
+            <Box sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}>
                 <List component="nav" aria-label="secondary mailbox folder">
                     {listItems}
                 </List>
-            </Box>*/}
-            <ul>
-                {delayedMessages.map((message) =>
-                    <li key={message.id} >
-                        {message.text}/>
-                    </li>
-                )}
-            </ul>
-            {tmp}
+            </Box>
         </div>
        
         
