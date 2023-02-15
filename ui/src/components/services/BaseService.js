@@ -1,5 +1,5 @@
 ﻿export default class BaseService {
-    _baseUrl = 'https://localhost:44392/api/';
+    _baseUrl = 'https://7689-109-229-29-112.eu.ngrok.io/api/';
 
     getResource = async url => {
         const call = _url => fetch(this._baseUrl + _url, {
