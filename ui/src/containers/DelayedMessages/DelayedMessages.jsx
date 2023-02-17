@@ -20,13 +20,13 @@ export default function DelayedMessages() {
     const pageSize = 9;
 
     useEffect(() => {
-        //getDelayedMessages();
+        getDelayedMessages();
         tg.expand()
         tg.BackButton.show()
     }, [])
     
     useEffect(() => {
-        //getDelayedMessages();
+        getDelayedMessages();
     }, [page])
 
     const handlePageChange = (event, value) => {
@@ -35,17 +35,17 @@ export default function DelayedMessages() {
     
     const getDelayedMessages = () => {
         const userId  = tg.initDataUnsafe.user.id;
-        // delayedMessageService
-        //     .getMessagesByUserId(userId,page,pageSize,'etDesc')
-        //     .then(res => res.json())
-        //         .then(res => {
-        //             setPage(res.pageIndex);
-        //             setPaginationCount(Math.ceil(res.totalCount / pageSize))
-        //             setDelayedMessages(res.data);
-        //         })
-        //         .catch(res => {
-        //             tg.showAlert(res)
-        //         })
+        delayedMessageService
+            .getMessagesByUserId(userId,page,pageSize,'etDesc')
+            .then(res => res.json())
+                .then(res => {
+                    setPage(res.pageIndex);
+                    setPaginationCount(Math.ceil(res.totalCount / pageSize))
+                    setDelayedMessages(res.data);
+                })
+                .catch(res => {
+                    tg.showAlert(res)
+                })
     }
     return (
         <Fragment>
