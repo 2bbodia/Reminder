@@ -3,7 +3,7 @@ namespace API.Controllers;
 using Application.Common.Models;
 using Application.Messages.DelayedMessages.Commands.CancelDelayedMessage;
 using Application.Messages.DelayedMessages.Commands.CreateDelayedMessage;
-using Application.Messages.DelayedMessages.Queries.GetAllDelayedMessagesByUserId;
+using Application.Messages.DelayedMessages.Queries.GetDelayedMessagesByUserId;
 using Application.Messages.DelayedMessages.Queries.GetDelayedMessageById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -20,10 +20,9 @@ public class DelayedMessageController : ControllerBase
     }
     
     [HttpGet]
-    [Route("[action]/{id:long}")]
-    public async Task<IActionResult> GetAllMessagesByUserId(long id)
+    public async Task<IActionResult> GetMessagesByUserId([FromQuery] GetDelayedMessagesByUserIdQuery query)
     {
-        return Ok(await _mediatr.Send(new GetAllDelayedMessagesByUserIdQuery(id)));
+        return Ok(await _mediatr.Send(query));
     }
 
     [HttpGet]

@@ -1,0 +1,18 @@
+.messageListContainer{
+    display: flex;
+    justify-content: center;
+}
+
+.text{
+    color : var(--tg-theme-text-color)
+}
+
+.MuiPaginationItem-root{
+    color : var(--tg-theme-text-color)!important;
+}
+
+.MuiPagination-root{
+    display: flex;
+    justify-content: center;
+}
+

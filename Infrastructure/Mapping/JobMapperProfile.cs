@@ -14,6 +14,8 @@ public class JobMapperProfile : Profile
                 cf.MapFrom(f => f.Key))
             .ForMember(m => m.EnqueueAt, cf =>
                 cf.MapFrom(f => f.Value.EnqueueAt))
+            .ForMember(m => m.CreatedAt, cf =>
+                cf.MapFrom(f => f.Value.ScheduledAt))
             .ForMember(m => m.Text , cf => 
                 cf.Ignore());
 
