@@ -12,7 +12,7 @@ const tg = window.Telegram.WebApp;
 export default function DelayedMessages() {
 
     const [delayedMessages, setDelayedMessages] = useState([]);
-    const [paginationCount, setPaginationCount] = useState(0);
+    const [paginationCount, setPaginationCount] = useState(1);
     const [page, setPage] = useState(1);
     const pageSize = 9;
     
