@@ -23,7 +23,7 @@ export default function DelayedMessages() {
         setPaginationCount(Math.ceil(delayedMessages.length / pageSize))
         tg.expand()
         tg.BackButton.show()
-    })
+    },[])
 
     const handlePageChange = (event, value) => {
         setPage(value);

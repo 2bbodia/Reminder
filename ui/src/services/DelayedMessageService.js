@@ -10,7 +10,7 @@ export default class DelayedMessageService {
         searchParams.set("page",page);
         searchParams.set("pageSize",pageSize);
         searchParams.set("orderBy", orderBy);
-        return baseService.getResource('DelayedMessage' + searchParams.toString());
+        return baseService.getResource('DelayedMessage?' + searchParams.toString());
     }
     
     
