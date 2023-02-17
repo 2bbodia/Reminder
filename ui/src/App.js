@@ -6,7 +6,7 @@ import {
     Navigate,
     Routes
 } from 'react-router-dom';
-import {Menu, DelayedMessageList} from "./components";
+import {Menu, CreateForm} from "./components";
 import {DelayedMessages} from "./containers"
 
 
@@ -20,6 +20,7 @@ export default function App() {
             <Routes>
                 <Route path="/menu" element={<Menu/>}/>
                 <Route path="/delayedMessages" element={<DelayedMessages/>}/>
+                <Route path="/createForm" element={<CreateForm/>}/>
                 <Route exact
                        path="/"
                        element={<Navigate replace to="/menu"/>}

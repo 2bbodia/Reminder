@@ -13,5 +13,9 @@ export default class DelayedMessageService {
         return baseService.getResource('DelayedMessage?' + searchParams.toString());
     }
     
+    createMessage = (text, receiverId, timeToSend) => {
+        return baseService.setResource('DelayedMessage',{text, receiverId,timeToSend})
+    }
+    
     
 }
