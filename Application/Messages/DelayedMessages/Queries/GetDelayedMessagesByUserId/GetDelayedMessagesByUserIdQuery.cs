@@ -1,4 +1,5 @@
-﻿using Telegram.Bot.Types.ReplyMarkups;
+﻿using Application.Common.Helpers;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Application.Messages.DelayedMessages.Queries.GetDelayedMessagesByUserId;
 
@@ -11,10 +12,10 @@ public record GetDelayedMessagesByUserIdQuery(
     long UserId,
     string? OrderBy,
     int Page = 1, 
-    int PageSize=10) : IRequest<IReadOnlyList<DelayedMessageDto>>;
+    int PageSize=10) : IRequest<Pagination<DelayedMessageDto>>;
 
 
-public class GetDelayedMessagesByUserIdQueryHandler : IRequestHandler<GetDelayedMessagesByUserIdQuery,IReadOnlyList<DelayedMessageDto>>
+public class GetDelayedMessagesByUserIdQueryHandler : IRequestHandler<GetDelayedMessagesByUserIdQuery,Pagination<DelayedMessageDto>>
 {
     private readonly IDelayedMessageService _messageService;
 
@@ -23,7 +24,7 @@ public class GetDelayedMessagesByUserIdQueryHandler : IRequestHandler<GetDelayed
         _messageService = messageService;
     }
 
-    public async Task<IReadOnlyList<DelayedMessageDto>> Handle(GetDelayedMessagesByUserIdQuery request, CancellationToken cancellationToken)
+    public async Task<Pagination<DelayedMessageDto>> Handle(GetDelayedMessagesByUserIdQuery request, CancellationToken cancellationToken)
     {
         var messages =   await _messageService.GetAllByUserIdAsync(request.UserId);
 
@@ -45,9 +46,11 @@ public class GetDelayedMessagesByUserIdQueryHandler : IRequestHandler<GetDelayed
                 break;
         }
 
-        return  orderedMessages
+        var paginatedMessages =   orderedMessages
             .Skip((request.Page - 1) * request.PageSize)
             .Take(request.PageSize)
             .ToList();
+        var totalCount = messages.Count;
+        return new Pagination<DelayedMessageDto>(request.Page, request.PageSize, totalCount, paginatedMessages);
     }
 }

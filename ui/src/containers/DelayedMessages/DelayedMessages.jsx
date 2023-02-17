@@ -20,7 +20,6 @@ export default function DelayedMessages() {
     
     useEffect(() => {
         getDelayedMessages();
-        setPaginationCount(Math.ceil(delayedMessages.length / pageSize))
         tg.expand()
         tg.BackButton.show()
     })
@@ -31,16 +30,15 @@ export default function DelayedMessages() {
     };
     
     const getDelayedMessages = () => {
-        const userId  = tg.initDataUnsafe.user.id
-        delayedMessageService.getMessagesByUserId(userId,page,pageSize,'etDesc').then(res => res.json()).then(
-            res => {
-                setDelayedMessages(res)
-            }
-        ).catch(
-            res => {
-                tg.showAlert(res)
-            }
-        )
+        const userId  = tg.initDataUnsafe.user.id;
+        delayedMessageService.getMessagesByUserId(userId,page,pageSize,'etDesc').then(res =>{
+            setPage(res.pageIndex);
+            setPaginationCount(Math.ceil(res.totalCount / pageSize))
+            res.json().then(r => 
+            setDelayedMessages(r));
+        }).catch(res => {
+            tg.showAlert(res)
+        })
     }
     return (
         <Fragment>
