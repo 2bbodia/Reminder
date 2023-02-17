@@ -15,18 +15,19 @@ export default function DelayedMessages() {
     const [paginationCount, setPaginationCount] = useState(1);
     const [page, setPage] = useState(1);
     const pageSize = 9;
-    
-    
-    
+
     useEffect(() => {
         getDelayedMessages();
         tg.expand()
         tg.BackButton.show()
     }, [])
+    
+    useEffect(() => {
+        getDelayedMessages();
+    }, [page])
 
     const handlePageChange = (event, value) => {
         setPage(value);
-        getDelayedMessages();
     };
     
     const getDelayedMessages = () => {
