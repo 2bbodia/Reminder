@@ -23,7 +23,6 @@ export default function DelayedMessages() {
         setPaginationCount(Math.ceil(delayedMessages.length / pageSize))
         tg.expand()
         tg.BackButton.show()
-
     })
 
     const handlePageChange = (event, value) => {
@@ -39,10 +38,9 @@ export default function DelayedMessages() {
             }
         ).catch(
             res => {
-                tg.showAlert("Something went wrong")
+                tg.showAlert(res)
             }
         )
-        setDelayedMessages(data)
     }
     return (
         <Fragment>
