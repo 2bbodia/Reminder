@@ -14,7 +14,10 @@ export default class DelayedMessageService {
     }
     
     createMessage = (text, receiverId, timeToSend) => {
-        return baseService.setResource('DelayedMessage',{text, receiverId,timeToSend})
+        return baseService.setResource('DelayedMessage',
+            {text : text, 
+                receiverId :receiverId,
+                timeToSend :timeToSend})
     }
     
     
