@@ -39,7 +39,7 @@ export default function  CreateForm(){
     }
 
     const onTextChange = (newValue) =>{
-        console.log(newValue)
+        console.log(newValue.target.value)
         setData((prev) => ({
             ...prev,
             text :newValue
