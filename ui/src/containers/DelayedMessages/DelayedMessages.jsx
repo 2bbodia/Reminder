@@ -22,7 +22,7 @@ export default function DelayedMessages() {
         getDelayedMessages();
         tg.expand()
         tg.BackButton.show()
-    })
+    }, [])
 
     const handlePageChange = (event, value) => {
         setPage(value);
