@@ -20,9 +20,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseStaticFiles(); 
+app.UseDefaultFiles();
 app.UseCors(p => p.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 app.UseHttpsRedirection();
 app.MapControllers();
+app.MapFallbackToFile("index.html");
 
 app.Run();

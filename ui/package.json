@@ -22,8 +22,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "rimraf ./build && react-scripts start",
     "build": "react-scripts build",
+    "build-dev": "react-scripts build && xcopy /Y /S .\\build\\ ..\\API\\wwwroot && rimraf .\\build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
