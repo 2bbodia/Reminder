@@ -1,5 +1,5 @@
 ﻿export default class BaseService {
-    _baseUrl = 'https://8a86-188-163-29-111.eu.ngrok.io/api/';
+    _baseUrl = 'api/';
 
     getResource = async url => {
         const call = _url => fetch(this._baseUrl + _url, {
@@ -14,6 +14,39 @@
         //     // one more try:
         //     res = await call(url);
         // }
+        return res;
+    }
+    deleteResource = async url => {
+        const call = _url => fetch(this._baseUrl + _url, {
+            method: "delete",
+            headers: new Headers({
+                'Content-Type': 'application/json',
+            }),
+        });
+
+        let res = await call(url);
+        return res;
+    }
+
+    updateResource = async (url, data) => {
+        const call = (url, data) => fetch(
+            this._baseUrl + url,
+            {
+                method: "put",
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                }),
+                body: JSON.stringify(data)
+            }
+        );
+
+        let res = await call(url, data);
+
+        if (res.status === 401 && await this.refreshHandler()) {
+            // one more try:
+            res = await call(url, data);
+        }
+
         return res;
     }
     

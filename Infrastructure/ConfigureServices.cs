@@ -8,6 +8,8 @@ using Hangfire.SqlServer;
 using Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 public static class ConfigureServices
 {
@@ -33,8 +35,15 @@ public static class ConfigureServices
 
         services.AddTransient<IDelayedMessageService, DelayedMessageService>();
         services.AddTransient<IRecurringMessageService, RecurringMessageService>();
+
+        services.AddDbContext<ApplicationDbContext>(options =>
+               options.UseSqlServer(configuration.GetConnectionString("BotDbContext"),
+                   builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+        
+
+        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
         return services;
     }
-    
+
 
 }

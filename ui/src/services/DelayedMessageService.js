@@ -19,6 +19,10 @@ export default class DelayedMessageService {
                 receiverId :receiverId,
                 timeToSend :timeToSend})
     }
+
+    deleteMessage = (id) => {
+        return baseService.deleteResource('DelayedMessage/' + id);
+    }
     
     
 }

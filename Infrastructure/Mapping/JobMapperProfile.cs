@@ -3,7 +3,7 @@
 using AutoMapper;
 using Hangfire.Storage.Monitoring;
 using Application.Common.Models;
-
+using Hangfire.Storage;
 
 public class JobMapperProfile : Profile
 {
@@ -18,6 +18,8 @@ public class JobMapperProfile : Profile
                 cf.MapFrom(f => f.Value.ScheduledAt))
             .ForMember(m => m.Text , cf => 
                 cf.Ignore());
+
+        CreateMap<RecurringJobDto, RecurringMessageDto>();
 
     }
 }

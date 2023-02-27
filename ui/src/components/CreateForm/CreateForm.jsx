@@ -58,12 +58,14 @@ export default function  CreateForm(){
                 />
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DateTimePicker
+                        className="dateTimePicker"
                         renderInput={(props) => <TextField {...props} />}
-                        label="DateTimePicker"
                         value={data.timeToSend}
                         onChange={onDateChange}
+                        ampm = {false}
+                        disablePast = {true}
                     />
-                </LocalizationProvider>
+                </LocalizationProvider>     
                 <Button type="submit">Submit</Button>
             </form>
         </div>

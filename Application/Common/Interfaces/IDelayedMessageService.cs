@@ -6,7 +6,5 @@ public interface IDelayedMessageService
 {
     Task<string> CreateDelayedMessageAsync(string text, long receiverId, DateTime dateToSend);
     Task<IReadOnlyList<DelayedMessageDto>> GetAllByUserIdAsync(long userId);
-    Task<DelayedMessageDto?> GetByIdAsync(string jobId);
-
     Task<bool> CancelDelayedMessageAsync(string jobId);
 }

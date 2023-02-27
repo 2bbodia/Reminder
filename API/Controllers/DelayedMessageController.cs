@@ -4,7 +4,6 @@ using Application.Common.Models;
 using Application.Messages.DelayedMessages.Commands.CancelDelayedMessage;
 using Application.Messages.DelayedMessages.Commands.CreateDelayedMessage;
 using Application.Messages.DelayedMessages.Queries.GetDelayedMessagesByUserId;
-using Application.Messages.DelayedMessages.Queries.GetDelayedMessageById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,14 +22,6 @@ public class DelayedMessageController : ControllerBase
     public async Task<IActionResult> GetMessagesByUserId([FromQuery] GetDelayedMessagesByUserIdQuery query)
     {
         return Ok(await _mediatr.Send(query));
-    }
-
-    [HttpGet]
-    [Route("[action]/{id}")]
-    public async Task<IActionResult> GetById(string id)
-    {
-        var message = await _mediatr.Send(new GetDelayedMessageByIdQuery(id));
-        return message == null ? BadRequest() : Ok(message);
     }
 
     [HttpPost]

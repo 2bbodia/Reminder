@@ -7,3 +7,9 @@
 .createForm > * {
     margin: 10px 0;
 }
+
+
+.MuiOutlinedInput-root{
+background-color: var(--joy-palette-common-white);
+border-radius: 10px;
+} 

@@ -25,13 +25,6 @@ public class DelayedMessageService : BaseMessageService, IDelayedMessageService
     {
         return await Task.Run(() => GetAllByUserId(userId));
     }
-
-    
-    public async Task<DelayedMessageDto?> GetByIdAsync(string jobId)
-    {
-       return await Task.Run(() => GetById(jobId));
-    }
-
     
     public async Task<bool> CancelDelayedMessageAsync(string jobId)
     {
@@ -58,7 +51,11 @@ public class DelayedMessageService : BaseMessageService, IDelayedMessageService
         List<DelayedMessageDto> filteredMessages = new();
         foreach (var scheduledJob in scheduledJobs)
         {
-            var receiverId = long.Parse(connection.GetJobParameter(scheduledJob.Key, "receiverId"));
+            var parseResult = long.TryParse(
+                connection.GetJobParameter(scheduledJob.Key, "receiverId"),
+                out long receiverId);
+            if (!parseResult) continue;
+
             if (receiverId == id)
             {
                 var message = _mapper.Map<DelayedMessageDto>(scheduledJob);
@@ -86,21 +83,6 @@ public class DelayedMessageService : BaseMessageService, IDelayedMessageService
     {
         return BackgroundJob.Delete(id);  
     }
-
-    private DelayedMessageDto? GetById(string jobId)
-    {
-        var scheduledCount = GetScheduledCount();
-        var job =
-            GetScheduledJobs()
-            .FirstOrDefault(j => j.Key == jobId);
-
-        if (job.Key == null!) return null;
-        
-        var result =   _mapper.Map<DelayedMessageDto>(job);
-        result.Text = (string)job.Value.Job.Args[1];
-        return result;
-    }
-
     private long GetScheduledCount()
     {
         var jobStorage = JobStorage.Current;

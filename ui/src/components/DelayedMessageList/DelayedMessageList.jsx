@@ -1,34 +1,46 @@
-﻿import Delete from '@mui/icons-material/Delete';
-import {CssVarsProvider} from '@mui/joy/styles';
-import List from '@mui/joy/List';
-import ListItem from '@mui/joy/ListItem';
-import ListItemContent from '@mui/joy/ListItemContent';
-import {IconButton} from "@mui/joy";
-import "./DelayedMessageList.css"
+﻿import Delete from "@mui/icons-material/Delete";
+import { CssVarsProvider } from "@mui/joy/styles";
+import { IconButton } from "@mui/joy";
+import "./DelayedMessageList.css";
+import Table from "@mui/joy/Table";
+import { Fragment } from "react";
 
-
-export default function DelayedMessageList({delayedMessages}) {
-    return (
-        <div>
-            <div className={"messageListContainer"}>
-                <CssVarsProvider/>
-                    <List sx={{maxWidth: 300}} size={"lg"}>
-                        {
-                            delayedMessages.map(message =>
-                                <ListItem key={message.id} endAction={
-                                    <IconButton aria-label="Delete" size="sm" color="danger">
-                                        <Delete/>
-                                    </IconButton>
-                                }>
-                                    <ListItemContent className={"text"}>{message.text} - {message.enqueueAt}</ListItemContent>
-                                </ListItem>
-                            )
-                        }
-                    </List>
-            </div>        
-        </div>
-
-
-    );
+export default function DelayedMessageList({
+  delayedMessages,
+  deleteButtonHandler,
+}) {
+    if(delayedMessages.length === 0) return (<Fragment></Fragment>)
+  return (
+    <div>
+        <CssVarsProvider />
+        <Table variant={'solid'} color={'warning'}>
+          <thead>
+            <tr>
+              <th>Повідомлення</th>
+              <th>Дата відсилання</th>
+              <th>Відмінити</th>
+            </tr>
+          </thead>
+          <tbody>
+            {delayedMessages.map((message) => (
+              <tr key={message.id} >
+                <td>{message.text}</td>
+                <td>{message.enqueueAt}</td>
+                <td  className="cancelButton"> 
+                  <IconButton
+                    aria-label="Delete"
+                    size="sm"
+                    color="danger"
+                   
+                    onClick={() => deleteButtonHandler(message.id)}
+                  >
+                    <Delete />
+                  </IconButton>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+    </div>
+  );
 }
-
