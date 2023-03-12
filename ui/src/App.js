@@ -6,8 +6,8 @@ import {
     Navigate,
     Routes
 } from 'react-router-dom';
-import {Menu, CreateForm} from "./components";
-import {DelayedMessages} from "./containers"
+import {Menu, CreateDelayedMessageForm,CreateRecurringMessageForm} from "./components";
+import {DelayedMessages,RecurringMessages} from "./containers"
 
 
 const tg = window.Telegram.WebApp;
@@ -20,7 +20,9 @@ export default function App() {
             <Routes>
                 <Route path="/menu" element={<Menu/>}/>
                 <Route path="/delayedMessages" element={<DelayedMessages/>}/>
-                <Route path="/createForm" element={<CreateForm/>}/>
+                <Route path="/recurringMessages" element={<RecurringMessages/>}/>
+                <Route path="/createDelayedMessage" element={<CreateDelayedMessageForm/>}/>
+                <Route path="/createRecurringMessage" element={<CreateRecurringMessageForm/>}/>
                 <Route exact
                        path="/"
                        element={<Navigate replace to="/menu"/>}

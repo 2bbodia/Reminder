@@ -14,10 +14,9 @@ public class CancelRecurringMessageCommandHandler : IRequestHandler<CancelRecurr
         _recurringMessageService = recurringMessageService;
     }
 
-    public async Task<Unit> Handle(CancelRecurringMessageCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CancelRecurringMessageCommand request, CancellationToken cancellationToken)
     {
         await _recurringMessageService.CancelRecurringMessageAsync(request.Id);
-        return Unit.Value;
     }
 }
 

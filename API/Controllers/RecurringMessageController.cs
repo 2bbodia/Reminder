@@ -2,7 +2,6 @@ namespace API.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using Application.Messages.DelayedMessages.Commands.CancelDelayedMessage;
 using Application.Messages.RecurringMessages.Queries.GetRecurringMessagesByUserId;
 using Application.Messages.RecurringMessages.Commands.CreateMinutelyRecurringMessage;
 using Application.Messages.RecurringMessages.Commands.CreateHourlyRecurringMessage;
@@ -26,8 +25,8 @@ public class RecurringMessageController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetMessagesByUserId([FromQuery] GetRecurringMessagesByUserIdQuery query)
     {
-        await _mediatr.Send(query);
-        return Ok();
+        var messages = await _mediatr.Send(query);
+        return Ok(messages);
     }
 
     [HttpPost]
@@ -76,7 +75,8 @@ public class RecurringMessageController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> CancelRecurringMessage(string id)
     {
-        return Ok(await _mediatr.Send(new CancelRecurringMessageCommand(id)));
+        await _mediatr.Send(new CancelRecurringMessageCommand(id));
+        return Ok();
     }
 
 }

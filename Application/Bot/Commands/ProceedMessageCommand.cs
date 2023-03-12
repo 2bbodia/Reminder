@@ -14,11 +14,10 @@ public class ProceedMessageCommandHandler : IRequestHandler<ProceedMessageComman
         _mediatr = mediatr;
     }
 
-    public async Task<Unit> Handle(ProceedMessageCommand request, CancellationToken cancellationToken)
+    public async Task Handle(ProceedMessageCommand request, CancellationToken cancellationToken)
     {
         var command = GetBotCommand(request.Message);
          await  _mediatr.Send(command);
-        return Unit.Value ;
     }
 
     private static IRequest GetBotCommand(Message message) => message.Text switch

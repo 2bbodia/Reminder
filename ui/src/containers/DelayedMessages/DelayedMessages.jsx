@@ -1,4 +1,4 @@
-﻿import { Fragment, useEffect, useState ,useCallback} from "react";
+﻿import { Fragment, useEffect, useState } from "react";
 import Button from "@mui/joy/Button";
 import { CssVarsProvider } from "@mui/joy/styles";
 import "./DelayedMessages.css";
@@ -6,36 +6,55 @@ import { DelayedMessageService } from "../../services";
 import { Pagination, PaginationItem } from "@mui/material";
 import { DelayedMessageList } from "../../components";
 import { useNavigate } from "react-router-dom";
+import {calculateMessagesCountForPage} from "../../helpers"
 
 const delayedMessageService = new DelayedMessageService();
+
 
 const tg = window.Telegram.WebApp;
 export default function DelayedMessages() {
   const navigate = useNavigate();
 
   const [delayedMessages, setDelayedMessages] = useState([]);
-  const [paginationCount, setPaginationCount] = useState(0);
-  const [page, setPage] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
-  const [pageSize, setPageSize] = useState(0);
+  const [pageOptions, setPageOptions] = useState(()=>{
+    const initialPageSize = calculateMessagesCountForPage(tg.viewportStableHeight);
+    return {
+      page: 1,
+      pageSize: initialPageSize,
+      paginationCount:0,
+      totalCount: 0,
+    }
+  }
+  );
 
   useEffect(() => {
-    tg.expand();
+    tg.onEvent("viewportChanged", handleViewportChange);
     tg.BackButton.show();
-    const initialPageSize = calculateMessagesCountForPage(tg.viewportStableHeight);
-    setPageSize(initialPageSize);
+    getDelayedMessages();
+
+    return () => {
+      tg.offEvent("viewportChanged", handleViewportChange);
+    };
   }, []);
 
-  useEffect(() => {
+useEffect(() => {
     getDelayedMessages();
-  },[pageSize]);
+  }, [pageOptions.page, pageOptions.pageSize]);
 
-  useEffect(() => {
-    getDelayedMessages();
-  }, [page]);
+
+  const handleViewportChange = (e) => {
+    const newPageSize = calculateMessagesCountForPage(tg.viewportStableHeight);
+    setPageOptions({
+      ...pageOptions,
+      pageSize: newPageSize,
+    });
+  };
 
   const handlePageChange = (event, value) => {
-    setPage(value);
+    setPageOptions({
+      ...pageOptions,
+      page: value,
+    });
   };
 
   const handleDeleteButtonClick = (id) => {
@@ -50,20 +69,19 @@ export default function DelayedMessages() {
   };
 
 
-  const getDelayedMessages = useCallback(() => {
-    if(!pageSize) return;
+  const getDelayedMessages = () => {
     const userId = tg.initDataUnsafe.user.id;
-    console.log('userId:', userId);
-  console.log('page:', page);
-  console.log('pageSize:', pageSize);
     delayedMessageService
-      .getMessagesByUserId(userId, page, pageSize, "etDesc")
+      .getMessagesByUserId(userId, pageOptions.page, pageOptions.pageSize, "etDesc")
       .then((res) => res.json())
       .then((res) => {
-        console.log('res:', res);
-        setPage(res.pageIndex);
-        setTotalCount(res.totalCount);
-        setPaginationCount(Math.ceil(res.totalCount / pageSize));
+        setPageOptions(
+          {
+            page: res.pageIndex,
+            totalCount: res.totalCount,
+            paginationCount: Math.ceil(res.totalCount / res.pageSize),
+            pageSize: res.pageSize
+          });
         let messages = res.data;
         messages = messages.map((message) => {
           const date = new Date(message.enqueueAt);
@@ -75,27 +93,9 @@ export default function DelayedMessages() {
       .catch((res) => {
         tg.showAlert(res);
       });
-  }, [page, pageSize]);
-
-  const calculateMessagesCountForPage = (number) => {
-    const ranges = [
-      [300, 400, 5],
-      [400, 500, 6],
-      [500, 600, 7],
-      [600, 700, 8],
-      [700, 800, 9],
-      [800, 900, 10],
-    ];
-
-    for (let i = 0; i < ranges.length; i++) {
-      const [start, end, coefficient] = ranges[i];
-      if (number >= start && number < end) {
-        return coefficient;
-      }
-    }
-    return null; // якщо число не входить в жоден проміжок
   };
 
+ 
   return (
     <Fragment>
       <CssVarsProvider />
@@ -103,7 +103,7 @@ export default function DelayedMessages() {
         <Button
           color="warning"
           size="lg"
-          onClick={() => navigate("/createForm")}
+          onClick={() => navigate("/createDelayedMessage")}
         >
           Створити нову подію
         </Button>
@@ -115,11 +115,11 @@ export default function DelayedMessages() {
       />
       </div>
       
-      {totalCount > pageSize && (
+      {pageOptions.totalCount > pageOptions.pageSize && (
         <Pagination
-          count={paginationCount}
+          count={pageOptions.paginationCount}
           size="large"
-          page={page}
+          page={pageOptions.page}
           siblingCount={0}
           shape="rounded"
           onChange={handlePageChange}

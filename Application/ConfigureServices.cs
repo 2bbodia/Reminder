@@ -19,7 +19,7 @@ public static class ConfigureServices
             options.AddMaps(Assembly.GetExecutingAssembly());
         });
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        services.AddMediatR(Assembly.GetExecutingAssembly());
+        services.AddMediatR(f => f.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         services
             .AddHttpClient("telegramBot")
             .AddTypedClient<ITelegramBotClient>(httpClient => new TelegramBotClient(configuration["BotConfiguration:Token"]!, httpClient));

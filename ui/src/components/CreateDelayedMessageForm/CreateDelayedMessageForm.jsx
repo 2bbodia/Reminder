@@ -8,7 +8,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import React from "react";
-import "./CreateForm.css"
+import "./CreateDelayedMessageForm.css"
 import {DelayedMessageService} from "../../services";
 import {useNavigate} from "react-router-dom";
 
@@ -16,7 +16,7 @@ const messageService = new DelayedMessageService();
 
 const tg = window.Telegram.WebApp;
 
-export default function  CreateForm(){
+export default function  CreateDelayedMessageForm(){
     const [data,setData] = React.useState({
         text :"",
         timeToSend: new Date().toISOString().slice(0, 10)

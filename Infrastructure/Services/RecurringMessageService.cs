@@ -3,6 +3,7 @@
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using AutoMapper;
+using Cronos;
 using Hangfire;
 using Hangfire.Storage;
 using System;
@@ -109,15 +110,21 @@ public class RecurringMessageService : BaseMessageService, IRecurringMessageServ
         var connection = jobStorage.GetConnection();
         var recurringJobs = connection.GetRecurringJobs();
 
-
         List<RecurringMessageDto> filteredMessages = new();
         foreach (var recurringJob in recurringJobs)
         {
-            var receiverId = long.Parse(connection.GetJobParameter(recurringJob.Id, "receiverId"));
+            CronExpression cron = CronExpression.Parse(recurringJob.Cron);
+            var nextOccurenceFromNow = cron.GetNextOccurrence(DateTime.UtcNow);
+            var nextOccurenceFromPrevious = cron.GetNextOccurrence(nextOccurenceFromNow!.Value);
+
+            var timeSpan = nextOccurenceFromPrevious!.Value - nextOccurenceFromNow!.Value;            
+
+            long.TryParse(recurringJob.Id.Split("_")[0],out long receiverId);
             if (receiverId == id)
             {
                 var message = _mapper.Map<RecurringMessageDto>(recurringJob);
                 message.Text = (string)recurringJob.Job.Args[1];
+                message.TimeSpan = timeSpan;
                 filteredMessages.Add(message);
             }
 
@@ -129,11 +136,11 @@ public class RecurringMessageService : BaseMessageService, IRecurringMessageServ
     public Guid CreateRecurringMessage(string text, long receiverId, string time)
     {
         Guid jobId = Guid.NewGuid();
+        string id = receiverId + "_" + jobId.ToString();
         RecurringJob.AddOrUpdate(
-            jobId.ToString(),
+            id,
             () => this.SendTextMessage(receiverId, text, CancellationToken.None),
            time);
-
         return jobId;
     }
 

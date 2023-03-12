@@ -14,7 +14,7 @@ public class ProceedUpdateCommandHandler : IRequestHandler<ProceedUpdateCommand>
         _mediatr = mediatr;
     }
 
-    public async Task<Unit> Handle(ProceedUpdateCommand request, CancellationToken cancellationToken)
+    public async Task Handle(ProceedUpdateCommand request, CancellationToken cancellationToken)
     {
         switch (request.Update.Type)
         {
@@ -24,7 +24,6 @@ public class ProceedUpdateCommandHandler : IRequestHandler<ProceedUpdateCommand>
                     await _mediatr.Send(new ProceedMessageCommand(msg), cancellationToken);
                 break;
         }
-        return Unit.Value;
 
     }
 }

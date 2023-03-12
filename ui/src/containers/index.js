@@ -1,2 +1,3 @@
 ﻿import DelayedMessages from "./DelayedMessages";
-export {DelayedMessages}
+import RecurringMessages from "./RecurringMessages";
+export {DelayedMessages , RecurringMessages}

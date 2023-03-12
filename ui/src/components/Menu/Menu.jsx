@@ -6,7 +6,7 @@ import Button from "@mui/joy/Button";
 import Stack from "@mui/joy/Stack";
 import { useEffect } from "react";
 import ScheduleSendIcon from "@mui/icons-material/ScheduleSend";
-
+import LoopIcon from "@mui/icons-material/Loop";
 
 const theme = extendTheme({
   components: {
@@ -23,7 +23,6 @@ const theme = extendTheme({
 
 const tg = window.Telegram.WebApp;
 
-
 export default function Menu() {
   const navigate = useNavigate();
 
@@ -33,13 +32,13 @@ export default function Menu() {
     tg.BackButton.hide();
   }, []);
 
-
-
   const handleScheduledMessagesClick = () => {
     navigate("/delayedMessages");
   };
 
-
+  const handleRecurringMessagesClick = () => {
+    navigate("/recurringMessages");
+  };
 
   return (
     <div style={{ paddingTop: "10px" }}>
@@ -57,10 +56,16 @@ export default function Menu() {
             size="lg"
             startDecorator={<ScheduleSendIcon />}
           >
-            Мої нагадування
+            Одноразові нагадування
           </Button>
-          <Button color="success" variant="soft" size="lg">
-            Something else
+          <Button
+            color="success"
+            variant="soft"
+            size="lg"
+            startDecorator={<LoopIcon />}
+            onClick={handleRecurringMessagesClick}
+          >
+            Багаторазові нагадування
           </Button>
         </Stack>
       </CssVarsProvider>
