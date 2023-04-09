@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Messages\RecurringMessages\Queries\GetRecurringMessagesByUserId\GetAllByUserIdQueryHandler.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Common\Exceptions\" />
   </ItemGroup>
 

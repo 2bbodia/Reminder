@@ -33,8 +33,7 @@ public static class ConfigureServices
         services.AddHangfireServer();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-        services.AddTransient<IDelayedMessageService, DelayedMessageService>();
-        services.AddTransient<IRecurringMessageService, RecurringMessageService>();
+        services.AddScoped<IEventReminderService, EventReminderService>();
 
         services.AddDbContext<ApplicationDbContext>(options =>
                options.UseSqlServer(configuration.GetConnectionString("BotDbContext"),

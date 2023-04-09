@@ -1,4 +1,3 @@
-﻿import DelayedMessageService from "./DelayedMessageService";
-import RecurringMessageService from "./RecurringMessageService";
+﻿import EventsService from "./EventsService";
 
-export {DelayedMessageService, RecurringMessageService}
+export {EventsService}

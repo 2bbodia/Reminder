@@ -3,6 +3,7 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Events;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Text;
 
 namespace Application.Events.Commands.CreateEvent;
@@ -13,7 +14,8 @@ public record CreateEventCommand(
     string Description,
     DateTime StartDate,
     DateTime EndDate,
-    DateTime RemindAt) : IRequest<Guid>;
+    DateTime RemindAt,
+    string Importance) : IRequest<Guid>;
 
 public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, Guid>
 {
@@ -29,18 +31,20 @@ public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, Gui
     public async Task<Guid> Handle(CreateEventCommand request, CancellationToken cancellationToken)
     {
         var user = await _db.Users.FindAsync(request.UserId) ?? throw new Exception();
-
+        var eventImportance = await _db
+            .EventImportances
+            .FirstOrDefaultAsync(e => e.Name.Equals(request.Importance));
         var userEvent = _mapper.Map<Event>(request);
-        StringBuilder sb = new();
-        sb.Append($"Нагадування:{Environment.NewLine}")
-            .Append($"Назва події: {userEvent.Title}{Environment.NewLine}")
-            .Append($"Опис події: {userEvent.Description}{Environment.NewLine}")
-            .Append($"Початок події: {userEvent.StartDate}{Environment.NewLine}")
-            .Append($"Кінець події: {userEvent.EndDate}{Environment.NewLine}");
-
-        userEvent.AddDomainEvent(new EventCreatedEvent(user.Id, sb.ToString(), request.RemindAt));
-
+        if(eventImportance != null)
+        {
+            userEvent.EventImportanceId = eventImportance.Id;
+        }
         await _db.Events.AddAsync(userEvent);
+
+        userEvent.AddDomainEvent(
+            new EventCreatedEvent(
+                userEvent,
+                request.RemindAt ));
 
         await _db.SaveChangesAsync(cancellationToken);
 

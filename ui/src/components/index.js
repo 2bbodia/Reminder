@@ -1,7 +1,4 @@
-﻿import DelayedMessageList from "./DelayedMessageList";
-import Menu from "./Menu";
-import CreateDelayedMessageForm from "./CreateDelayedMessageForm";
-import RecurringMessageList from "./RecurringMessageList";
-import CreateRecurringMessageForm from "./CreateRecurringMessageForm";
+﻿import CreateEventForm from "./CreateEventForm";
+import Events from "./Events";
 
-export {DelayedMessageList,Menu,CreateDelayedMessageForm,CreateRecurringMessageForm,RecurringMessageList};
+export {CreateEventForm,Events};

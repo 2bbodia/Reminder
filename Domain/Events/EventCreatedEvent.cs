@@ -1,18 +1,18 @@
 ﻿using Domain.Common;
+using Domain.Entities;
 
 namespace Domain.Events;
 
 public class EventCreatedEvent : BaseEvent
 {
-    public EventCreatedEvent(long receiverId, string message, DateTime timeToRemind)
+    public EventCreatedEvent( Event ev, DateTime timeToRemind)
     {
-        ReceiverId = receiverId;
-        Message = message;
         TimeToRemind = timeToRemind;
+        Event = ev;
     }
 
-    public long ReceiverId {get;}
-    public string Message { get; }
+    public Event Event { get; set; }
 
     public DateTime TimeToRemind { get; }
+
 }

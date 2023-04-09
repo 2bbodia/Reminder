@@ -13,5 +13,7 @@ public class Event : BaseEntity
 
     public User User { get; set; } = default!;
 
-    // public EventSchedule EventSchedule { get; set; } = default!;
+    public int EventImportanceId { get; set; }
+
+    public EventImportance Importance { get; set; } = default!;
 }
