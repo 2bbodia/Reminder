@@ -2,6 +2,7 @@
 using AutoMapper;
 using Domain.Entities;
 using Domain.Events;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
@@ -22,7 +23,7 @@ public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, Gui
     private readonly IApplicationDbContext _db;
     private readonly IMapper _mapper;
 
-    public CreateEventCommandHandler(IApplicationDbContext db, IMapper mapper)
+    public CreateEventCommandHandler(IApplicationDbContext db, IMapper mapper, IValidator<CreateEventCommand> validator)
     {
         _db = db;
         _mapper = mapper;

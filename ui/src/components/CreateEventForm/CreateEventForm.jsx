@@ -19,6 +19,8 @@ import ModalDialog from "@mui/joy/ModalDialog";
 import Typography from "@mui/joy/Typography";
 import Box from "@mui/joy/Box";
 import Divider from "@mui/joy/Divider";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const eventsService = new EventsService();
 
@@ -60,14 +62,12 @@ export default function CreateEventForm() {
       .isExist(tg.initDataUnsafe.user.id, data.startDate, data.endDate)
       .then((res) => {
         console.log(res);
-        if (res.status === 204) {
-          createEvent();
-          return;
-        }
         if (res.status === 200) {
           setOpen(true);
           return;
         }
+          createEvent();
+        
       });
   };
 
@@ -84,9 +84,26 @@ export default function CreateEventForm() {
         remindAt,
         selectedImportance
       )
-      .then(() => {
-        navigate(-1);
-      });
+      .then((res ) => {
+        if(res.ok)
+          {
+            toast.success("Подія успішно створена")
+            navigate(-1);
+            return;
+          }
+          res.json().then((data) => {
+            console.log(data);
+            for(let error in data.errors)
+            {
+              toast.error(data.errors[error][0],
+                {
+                  position: toast.POSITION.TOP_RIGHT
+                })
+            }
+            
+          });
+      })
+     
   };
 
   const onStartDateChange = (newValue) => {
@@ -123,12 +140,12 @@ export default function CreateEventForm() {
       <form className="createForm" onSubmit={handleSubmit}>
         <Input
           className="formItem"
-          placeholder="Title"
+          placeholder="Заголовок"
           onChange={onTitleChange}
         />
         <Input
           className="formItem"
-          placeholder="Description"
+          placeholder="Опис"
           onChange={onDescriptionChange}
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -187,7 +204,7 @@ export default function CreateEventForm() {
           </RadioGroup>
         </FormControl>
         <Button className="formItem" type="submit">
-          Submit
+          Зберегти
         </Button>
       </form>
       <Modal open={open} onClose={() => setOpen(false)}>

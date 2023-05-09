@@ -1,7 +1,9 @@
 using API.ConfigurationModels;
+using API.Filters;
 using API.HostedServices;
 using Application;
 using Application.Common.Interfaces;
+using FluentValidation.AspNetCore;
 using Infrastructure;
 using Infrastructure.Persistence;
 using Microsoft.Data.SqlClient;
@@ -19,6 +21,11 @@ builder.Services.AddHostedService<BotWebhookConfigurator>();
 builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllersWithViews(options =>
+        options.Filters.Add<ApiExceptionFilterAttribute>());
+builder.Services.AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters();
+
 
 var app = builder.Build();
 
