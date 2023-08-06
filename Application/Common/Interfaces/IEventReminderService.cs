@@ -2,7 +2,11 @@
 
 public interface IEventReminderService
 {
-    Task RemindAboutEventAsync(DateTime remindAt, string message, long receiverId,Guid eventId);
+    Task RemindAboutEventAsync(
+        DateTime remindAt, 
+        string message, 
+        long receiverId,
+        Guid eventId);
 
     Task CancelRemindingAboutEventAsync(Guid eventId);
 }

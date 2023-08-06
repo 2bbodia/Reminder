@@ -2,13 +2,10 @@ using API.ConfigurationModels;
 using API.Filters;
 using API.HostedServices;
 using Application;
-using Application.Common.Interfaces;
 using FluentValidation.AspNetCore;
 using Infrastructure;
 using Infrastructure.Persistence;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 

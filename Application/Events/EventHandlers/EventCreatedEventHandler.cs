@@ -18,11 +18,9 @@ public class EventCreatedEventHandler : INotificationHandler<EventCreatedEvent>
     {
         var userEvent = notification.Event;
         StringBuilder sb = new();
-        sb.Append($"Нагадування:{Environment.NewLine}")
+        sb.Append($"Нагадування про наступаючу подію:{Environment.NewLine}")
             .Append($"Назва події: {userEvent.Title}{Environment.NewLine}")
-            .Append($"Опис події: {userEvent.Description}{Environment.NewLine}")
-            .Append($"Початок події: {userEvent.StartDate}{Environment.NewLine}")
-            .Append($"Кінець події: {userEvent.EndDate}{Environment.NewLine}");
+            .Append($"Опис події: {userEvent.Description}{Environment.NewLine}");
 
         await _eventReminderService.RemindAboutEventAsync(
             notification.TimeToRemind,
